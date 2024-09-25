@@ -9,4 +9,4 @@ router.get('/', getEvent)
 router.post('/add-event', postEvent)
 
 
-export default router;
+module.exports = router;
