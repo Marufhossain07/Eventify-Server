@@ -13,7 +13,7 @@ app.use(express.json())
 
 connectToDatabase()
 
-app.use('/event', eventRoute)
+app.use('/', eventRoute)
 
 
 app.get('/', (req,res)=>{
