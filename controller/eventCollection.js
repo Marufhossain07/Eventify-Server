@@ -15,7 +15,7 @@ const getEvent = async(req,res)=>{
 const getIdEvent = async(req,res)=>{
     const db = getDatabase()
     const id = req.params._id
-    console.log(id);
+    // console.log(id);
     
     const query = { _id: new ObjectId(id) }
     const eventCollection = db.collection('events')

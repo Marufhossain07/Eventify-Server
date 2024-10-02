@@ -1,6 +1,14 @@
 const { getDatabase } = require("../config/db")
 
-
+const getEmailConfirmEvent = async(req,res)=>{
+    const db = getDatabase()
+    const email = req.params.email;
+    // console.log(email);
+    const query = { email: email };
+    const eventCollection = db.collection('confirmEvents')
+    const confirmEventData = await eventCollection.find(query).toArray();
+    res.send(confirmEventData)
+}
 
 const postConfirmEvent = async (req,res)=>{
     const db = getDatabase()
@@ -12,4 +20,5 @@ const postConfirmEvent = async (req,res)=>{
 
 module.exports={
     postConfirmEvent,
+    getEmailConfirmEvent
 }
