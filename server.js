@@ -6,6 +6,7 @@ const app = express()
 const { connectToDatabase } = require('./config/db');
 const eventRoute = require('./routes/eventRoute');
 const userRoute = require('./routes/userRoute');
+const confirmEventRoute = require('./routes/cofirmEventRoute');
 
 
 app.use(cors())
@@ -15,7 +16,7 @@ app.use(express.json())
 connectToDatabase()
 
 app.use('/', userRoute, eventRoute)
-// app.use('/', userRoute)
+app.use('/', confirmEventRoute)
 
 app.get('/', (req, res) => {
     res.send('server is running')
