@@ -1,5 +1,12 @@
 const { getDatabase } = require("../config/db")
 
+const getConfirmEvent = async(req,res)=>{
+    const db = getDatabase()
+    const eventCollection = db.collection('confirmEvents')
+    const confirmEventData = await eventCollection.find().toArray()
+    res.send(confirmEventData)
+}
+
 const getEmailConfirmEvent = async(req,res)=>{
     const db = getDatabase()
     const email = req.params.email;
@@ -20,5 +27,6 @@ const postConfirmEvent = async (req,res)=>{
 
 module.exports={
     postConfirmEvent,
+    getConfirmEvent,
     getEmailConfirmEvent
 }
