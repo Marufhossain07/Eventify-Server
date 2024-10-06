@@ -27,9 +27,40 @@ const postUser = async (req, res) => {
     res.send(addUser);
 };
 
+const getAdmin = async(req,res)=>{
+    const db = getDatabase()
+    const userCollections = db.collection('users')
+
+    const email = req.params.email;
+    const query = {email: email};
+    const user = await userCollections.findOne(query)
+
+    let admin = false;
+    if (user){
+        admin = user?.role === 'admin'
+    }
+    res.send({admin})
+}
+const getModerator = async(req,res)=>{
+    const db = getDatabase()
+    const userCollections = db.collection('users')
+
+    const email = req.params.email;
+    const query = {email: email};
+    const user = await userCollections.findOne(query)
+
+    let moderator = false;
+    if (user){
+        moderator = user?.role === 'moderator'
+    }
+    res.send({moderator})
+}
+
 
 
 module.exports = {
     getUser,
     postUser,
+    getAdmin,
+    getModerator
 };

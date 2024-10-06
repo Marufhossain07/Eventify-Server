@@ -24,6 +24,8 @@ const getIdEvent = async(req,res)=>{
     res.send(eventData)
 }
 
+
+
 const postEvent = async (req,res)=>{
     const db = getDatabase()
     const eventCollection = db.collection('events')
