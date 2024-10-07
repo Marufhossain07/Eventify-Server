@@ -1,13 +1,36 @@
 const { getDatabase } = require("../config/db")
+const { ObjectId } = require("mongodb")
 
-const getConfirmEvent = async(req,res)=>{
+const getConfirmEvent = async (req, res) => {
     const db = getDatabase()
     const eventCollection = db.collection('confirmEvents')
     const confirmEventData = await eventCollection.find().toArray()
     res.send(confirmEventData)
 }
 
-const getEmailConfirmEvent = async(req,res)=>{
+const updateEventData = async (req, res) => {
+    const db = getDatabase();
+    const eventCollection = db.collection('confirmEvents');
+
+    const id = req.params.id;
+    const BookData = req.body;
+    console.log(id, BookData);
+
+    const query = { _id: new ObjectId(id) };
+    const options = { upsert: true };
+
+    const updateDoc = {
+        $set: {
+            ...BookData,
+        },
+    };
+
+    const result = await eventCollection.updateOne(query, updateDoc, options);
+
+    res.send(result);
+};
+
+const getEmailConfirmEvent = async (req, res) => {
     const db = getDatabase()
     const email = req.params.email;
     // console.log(email);
@@ -17,7 +40,7 @@ const getEmailConfirmEvent = async(req,res)=>{
     res.send(confirmEventData)
 }
 
-const postConfirmEvent = async (req,res)=>{
+const postConfirmEvent = async (req, res) => {
     const db = getDatabase()
     const eventCollection = db.collection('confirmEvents')
     const newConfirmEvent = req.body;
@@ -25,8 +48,9 @@ const postConfirmEvent = async (req,res)=>{
     res.send(addNewEvent)
 }
 
-module.exports={
+module.exports = {
     postConfirmEvent,
     getConfirmEvent,
-    getEmailConfirmEvent
+    getEmailConfirmEvent,
+    updateEventData
 }
