@@ -48,9 +48,22 @@ const postConfirmEvent = async (req, res) => {
     res.send(addNewEvent)
 }
 
+const getCompletedEvents= async(req,res)=>{
+    const db = getDatabase()
+    const eventCollection = db.collection('confirmEvents')
+    const email = req.params.email;
+    const query = { 
+        email:email,
+        payment: 'Advance_Done'
+    };
+    const result = await eventCollection.find(query).toArray()
+    res.send(result)
+}
+
 module.exports = {
     postConfirmEvent,
     getConfirmEvent,
     getEmailConfirmEvent,
-    updateEventData
+    updateEventData,
+    getCompletedEvents
 }

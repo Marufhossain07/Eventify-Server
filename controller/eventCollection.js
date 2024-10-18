@@ -34,8 +34,18 @@ const postEvent = async (req,res)=>{
     res.send(addEvent)
 }
 
+const deleteEvent = async(req,res)=>{
+    const db = getDatabase()
+    const eventCollection = db.collection('events')
+    const id = req.params.id
+    const query = { _id: new ObjectId(id)}
+    const result = await eventCollection.deleteOne(query)
+    res.send(result)
+}
+
 module.exports={
     getEvent,
     getIdEvent,
-    postEvent
+    postEvent,
+    deleteEvent
 }
