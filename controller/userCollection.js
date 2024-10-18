@@ -5,9 +5,18 @@ const getUser = async (req, res) => {
     const db = getDatabase()
     const userCollections = db.collection('users')
     const userData = await userCollections.find().toArray()
-
     res.send(userData)
 }
+const getUserByEmail = async (req, res) => {
+    const db = getDatabase();  
+    const userCollections = db.collection('users');  
+    const userEmail = req.params.email;  
+    const userData = await userCollections.findOne({ email: userEmail });
+    if (!userData) {
+        return res.status(404).send({ error: 'User not found' });
+    }
+    res.send(userData);
+};
 
 
 
@@ -21,7 +30,6 @@ const postUser = async (req, res) => {
     if (existingUser) {
         return res.send({ message: 'user already exist' })
     }
-
     const addUser = await userCollections.insertOne(userData);
     console.log(addUser)
     res.send(addUser);
@@ -30,11 +38,9 @@ const postUser = async (req, res) => {
 const getAdmin = async (req, res) => {
     const db = getDatabase()
     const userCollections = db.collection('users')
-
     const email = req.params.email;
     const query = { email: email };
     const user = await userCollections.findOne(query)
-
     let admin = false;
     if (user) {
         admin = user?.role === 'admin'
@@ -44,11 +50,9 @@ const getAdmin = async (req, res) => {
 const getModerator = async (req, res) => {
     const db = getDatabase()
     const userCollections = db.collection('users')
-
     const email = req.params.email;
     const query = { email: email };
     const user = await userCollections.findOne(query)
-
     let moderator = false;
     if (user) {
         moderator = user?.role === 'moderator'
@@ -69,7 +73,6 @@ const makeAdmin = async (req, res) => {
     const updateDoc = {
         $set: {
             role: 'admin',
-
         }
     }
     const result = await userCollections.updateOne(query, updateDoc);
@@ -85,32 +88,20 @@ const makeModerator = async (req, res) => {
     const updateDoc = {
         $set: {
             role: 'moderator',
-
         }
     }
     const result = await userCollections.updateOne(query, updateDoc);
     res.send(result)
-
 }
 
-// app.delete('/wishlistDelete/:id', 
-// delete user
 const deleteUser = async (req, res) => {
     const db = getDatabase()
     const userCollections = db.collection('users')
     const id = req.params.id;
     const query = { _id: new ObjectId(id) };
-    console.log(query)
     const result = await userCollections.deleteOne(query);
-    console.log(result)
     res.send(result)
 }
-
-
-
-
-
-
 
 module.exports = {
     getUser,
@@ -119,5 +110,6 @@ module.exports = {
     getModerator,
     makeAdmin,
     makeModerator,
-    deleteUser
+    deleteUser,
+    getUserByEmail
 };
