@@ -60,10 +60,20 @@ const getCompletedEvents= async(req,res)=>{
     res.send(result)
 }
 
+const getEventById = async (req,res)=>{
+    const db = getDatabase()
+    const eventCollection = db.collection('confirmEvents')
+    const id = req.params.id
+    const query = { _id: new ObjectId(id)}
+    const result = await eventCollection.findOne(query)
+    res.send(result)
+}
+
 module.exports = {
     postConfirmEvent,
     getConfirmEvent,
     getEmailConfirmEvent,
     updateEventData,
-    getCompletedEvents
+    getCompletedEvents,
+    getEventById
 }
