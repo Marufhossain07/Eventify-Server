@@ -10,6 +10,7 @@ const confirmEventRoute = require('./routes/cofirmEventRoute');
 const galleryRoute = require('./routes/galleryRoute');
 const reviewRoute = require('./routes/reviewRoute');
 const moderatorRoute = require('./routes/moderatorRoute');
+const feedbackRoute = require('./routes/feedbackRoute');
 app.use(cors())
 app.use(express.json())
 
@@ -19,7 +20,7 @@ connectToDatabase()
 app.use('/', userRoute, eventRoute)
 app.use('/', confirmEventRoute, galleryRoute)
 app.use('/', reviewRoute, moderatorRoute)
-
+app.use('/', feedbackRoute)
 app.get('/', (req, res) => {
     res.send('server is running')
 })
