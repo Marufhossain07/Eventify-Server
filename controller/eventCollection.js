@@ -11,14 +11,32 @@ const getEvent = async(req,res)=>{
     res.send(eventData)
 }
 
-const getIdEvent = async(req,res)=>{
-    const db = getDatabase()
-    const id = req.params._id
-    const query = { _id: new ObjectId(id) }
-    const eventCollection = db.collection('events')
-    const eventData = await eventCollection.findOne(query)
-    res.send(eventData)
-}
+const getEventByID = async (req, res) => {
+    try {
+        const db = getDatabase();
+        const id = req.params._id;
+
+        // Check if id is a valid ObjectId before querying
+        if (!ObjectId.isValid(id)) {
+            return res.status(400).send({ message: 'Invalid ID format' });
+        }
+
+        const query = { _id: new ObjectId(id) };
+        const eventCollection = db.collection('events');
+        const eventData = await eventCollection.findOne(query);
+
+        console.log(id, eventData);
+
+        if (!eventData) {
+            return res.status(404).send({ message: 'Event not found' });
+        }
+
+        res.send(eventData);
+    } catch (error) {
+        console.error(error);
+        res.status(500).send({ message: 'Server error' });
+    }
+};
 
 
 
@@ -41,7 +59,7 @@ const deleteEvent = async(req,res)=>{
 
 module.exports={
     getEvent,
-    getIdEvent,
+    getEventByID,
     postEvent,
     deleteEvent
 }
