@@ -4,12 +4,20 @@ const { getDatabase } = require("../config/db")
 const getItems = async (req, res) => {
     const db = getDatabase();
     const itemsCollection = db.collection('eventItems');
-    
-    // Find documents where event is not 'completed'
     const result = await itemsCollection.find({ event: { $ne: 'completed' } }).toArray();
+    res.send(result);
+}
+
+const getConfirmedItems = async (req, res) => {
+    const db = getDatabase();
+    const itemsCollection = db.collection('eventItems');
+    
+    // Fetch only items where event === 'completed'
+    const result = await itemsCollection.find({ event: { $eq: 'completed' } }).toArray();
     
     res.send(result);
 }
+
 
 
 const postRequiredItems = async (req, res) => {
@@ -37,6 +45,7 @@ const updateRequiredItems = async (req, res) => {
 
 module.exports = {
     getItems,
+    getConfirmedItems,
     postRequiredItems,
     updateRequiredItems
 }
